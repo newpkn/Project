@@ -5,13 +5,13 @@ const url = require('url');
 const crypto = require('crypto');
 
 const PORT = 3000;
-const DATA_FILE = path.join(__dirname, 'data', 'profile.json');
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const DATA_FILE = path.join(__dirname, 'profile.json');
+const PUBLIC_DIR = __dirname;
 
 // ══════════════════════════════════════════
 //  🔐  ตั้งรหัสผ่านแอดมินตรงนี้
 // ══════════════════════════════════════════
-const ADMIN_PASSWORD = 'admin1234';
+const ADMIN_PASSWORD = 'admin439266';
 // ══════════════════════════════════════════
 
 // Active tokens (in-memory; logout on server restart)
@@ -30,6 +30,15 @@ const MIME = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
 };
+
+// รายชื่อไฟล์ระบบที่ไม่ให้เข้าถึงผ่านหน้าเว็บโดยตรง
+const BLOCKED_FILES = new Set([
+  '/server.js',
+  '/package.json',
+  '/package-lock.json',
+  '/Dockerfile',
+  '/profile.json'
+]);
 
 // Read profile data
 function readData() {
@@ -191,6 +200,10 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ─── Static files ───
+  if (BLOCKED_FILES.has(pathname)) {
+    return json(res, 403, { error: 'Forbidden' });
+  }
+
   let filePath = pathname === '/' ? '/index.html' : pathname;
   filePath = path.join(PUBLIC_DIR, filePath);
 
