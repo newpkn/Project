@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ─── Header ─── -->
+  <header class="site-header">
+    <h1>📋 My Profile & Portfolio</h1>
+    <p>โปรไฟล์และผลงานของฉัน</p>
+    <!-- Login / Logout button -->
+    <button class="login-btn" id="loginBtn" onclick="openLoginModal()">🔐 เข้าสู่ระบบแอดมิน</button>
+    <!-- Edit profile (admin only) -->
+    <button class="edit-profile-btn admin-only" onclick="openProfileModal()" style="display:none;">✏️ แก้ไขโปรไฟล์</button>
+  </header>
+
+  <div class="container">
+    <!-- ─── Profile Card ─── -->
+    <div class="profile-card" id="profileCard">
+      <div class="avatar-wrap" id="avatarWrap">?</div>
+      <div class="profile-info">
+        <h2 id="profileName">กำลังโหลด...</h2>
+        <div class="title-text" id="profileTitle"></div>
+        <p class="bio" id="profileBio"></p>
+        <div class="contact-row" id="contactRow"></div>
+      </div>
+    </div>
+
+    <!-- ─── Works Section ─── -->
+    <div class="section-header">
+      <h3>🏆 ผลงานของฉัน</h3>
+      <button class="btn btn-primary admin-only" onclick="openWorkModal()" style="display:none;">➕ เพิ่มผลงาน</button>
+    </div>
+
+    <div class="works-grid" id="worksGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <span>📂</span>
+      <p>ยังไม่มีผลงาน</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    Made with ❤️ — My Profile & Portfolio
+  </footer>
+
+  <!-- ═══ Modal: Login ═══ -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+      <h3>🔐 เข้าสู่ระบบแอดมิน</h3>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">กรอกรหัสผ่านแอดมินเพื่อแก้ไขข้อมูลโปรไฟล์และผลงาน</p>
+      <div class="form-group">
+        <label>รหัสผ่าน</label>
+        <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่านแอดมิน" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <div id="loginError" style="color:var(--danger);font-size:0.85rem;margin-bottom:0.5rem;display:none;"></div>
+      <div class="modal-buttons">
+        <button class="btn btn-ghost" onclick="closeModal('loginModal')">ยกเลิก</button>
+        <button class="btn btn-primary" onclick="doLogin()">🔓 เข้าสู่ระบบ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Modal: Edit Profile ═══ -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <h3>✏️ แก้ไขข้อมูลโปรไฟล์</h3>
+      <div class="form-group">
+        <label>ชื่อ-นามสกุล</label>
+        <input type="text" id="fName" placeholder="ชื่อ นามสกุล">
+      </div>
+      <div class="form-group">
+        <label>ตำแหน่ง / สาขาวิชา</label>
+        <input type="text" id="fTitle" placeholder="เช่น นิสิตวิทยาการคอมพิวเตอร์">
+      </div>
+      <div class="form-group">
+        <label>แนะนำตัว</label>
+        <textarea id="fBio" placeholder="เขียนแนะนำตัวสั้น ๆ"></textarea>
+      </div>
+      <div class="form-group">
+        <label>อีเมล</label>
+        <input type="email" id="fEmail" placeholder="email@example.com">
+      </div>
+      <div class="form-group">
+        <label>เบอร์โทร</label>
+        <input type="text" id="fPhone" placeholder="0xx-xxx-xxxx">
+      </div>
+      <div class="form-group">
+        <label>GitHub URL</label>
+        <input type="url" id="fGithub" placeholder="https://github.com/username">
+      </div>
+      <div class="form-group">
+        <label>LinkedIn URL</label>
+        <input type="url" id="fLinkedin" placeholder="https://linkedin.com/in/username">
+      </div>
+      <div class="form-group">
+        <label>URL รูปโปรไฟล์</label>
+        <input type="url" id="fAvatar" placeholder="https://... (เว้นว่างถ้าไม่มี)">
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-ghost" onclick="closeModal('profileModal')">ยกเลิก</button>
+        <button class="btn btn-primary" onclick="saveProfile()">💾 บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Modal: Add/Edit Work ═══ -->
+  <div class="modal-overlay" id="workModal">
+    <div class="modal">
+      <h3 id="workModalTitle">➕ เพิ่มผลงาน</h3>
+      <input type="hidden" id="wId">
+
+      <div class="form-group">
+        <label>ชื่อผลงาน *</label>
+        <input type="text" id="wTitle" placeholder="เช่น เว็บไซต์ร้านค้าออนไลน์">
+      </div>
+
+      <div class="form-group">
+        <label>รายละเอียด</label>
+        <textarea id="wDesc" placeholder="อธิบายผลงานสั้น ๆ"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>🔗ลิงก์ไปยังรายละเอียดผลงาน</label>
+        <input type="url" id="wLink" placeholder="https://... (ลิงก์ไปยังเว็บที่มีรายละเอียด)">
+        <div style="margin-top: 8px;"></div>
+        <label>ไฟล์แนบ</label>
+        <input type="file" id="wLinkFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar,.txt">
+        <small style="display: block; color: #666; margin-top: 4px;">
+          รองรับไฟล์ประเภท: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, RAR, TXT
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>URL รูปภาพ (ถ้ามี)</label>
+        <input type="url" id="wImage" placeholder="https://... (เว้นว่างถ้าไม่มี)">
+        <div style="margin-top: 8px;"></div>
+        <label>อัปโหลดรูปภาพ</label>
+        <input type="file" id="wImageFile" accept="image/*">
+        <small style="display: block; color: #666; margin-top: 4px;">
+          รองรับไฟล์ประเภท: JPG, PNG, GIF, WEBP
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>แท็ก (คั่นด้วยเครื่องหมายจุลภาค)</label>
+        <input type="text" id="wTags" placeholder="เช่น Web, Python, Design">
+      </div>
+
+      <div class="modal-buttons">
+        <button class="btn btn-ghost" onclick="closeModal('workModal')">ยกเลิก</button>
+        <button class="btn btn-primary" onclick="saveWork()">💾 บันทึก</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
