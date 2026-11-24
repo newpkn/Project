@@ -1,0 +1,23 @@
+{
+  "name": "นายปริญญา กิจประชา",
+  "title": "นิสิต / สาขาวิทยาการคอมพิวเตอร์",
+  "bio": "สวัสดีครับ! ผมเป็นนิสิตที่สนใจด้านเทคโนโลยี การพัฒนาเว็บ และการพัฒนาการซอฟแวร์",
+  "email": "parinya.kitpracha@gmail.com",
+  "phone": "0934176286",
+  "github": "https://github.com/newpkn/Project",
+  "linkedin": "https://www.linkedin.com/in/parinya-kitpracha-91a9ba451/",
+  "avatar": "",
+  "works": [
+    {
+      "id": "demo1",
+      "title": "โปรเจกต์ ICG",
+      "description": "เป็นรงมผลงาน Model 3D ที่ทำในรายวิชา Interactive Computer Graphics",
+      "link": "https://newpkn.github.io/icg/Profile.html",
+      "image": "",
+      "tags": [
+        "Web"
+      ],
+      "createdAt": "2026-11-24T00:00:00.000Z"
+    }
+  ]
+}
